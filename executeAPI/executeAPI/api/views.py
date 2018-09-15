@@ -23,22 +23,23 @@ def executeCode(request):
 
     os.chdir("../../codeexecution")
     if lang == "Python":
-        codeFile = open("main.py", "w") 
-        output = lang
+        codeFile = open("main.py", "w")
+        codeFile.write(code) 
+        codeFile.close()
+        subprocess.call(["docker", "run", "--rm", "codeboardpython" ]) 
     elif lang == "C++":
         codeFile = open("main.cpp", "w")
-        output = lang
+        codeFile.write(code) 
+        codeFile.close()
     elif lang == "Java":
         codeFile = open("main.java", "w")
-        output = lang
+        codeFile.write(code) 
+        codeFile.close()
     else:
         output = "Invalid language"
 
-    codeFile.write(code) 
-    codeFile.close()
 
-    subprocess.call(["docker", "run"])
-
+#docker run -it --rm --name my-running-app my-python-app
+ 
     outputData = {"lang":lang, "output":output}
     return JsonResponse(outputData)
-    #return HttpResponse("<h1>This is a test")
