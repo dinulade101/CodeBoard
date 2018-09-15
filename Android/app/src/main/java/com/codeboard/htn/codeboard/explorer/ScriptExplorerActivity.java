@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
@@ -14,24 +17,32 @@ import android.widget.Toast;
 
 import com.codeboard.htn.codeboard.R;
 import com.codeboard.htn.codeboard.image.SnippetCaptureActivity;
+import com.codeboard.htn.codeboard.model.Script;
+import com.codeboard.htn.codeboard.model.ScriptModel;
+import com.codeboard.htn.codeboard.util.CodeBoard;
+
+import java.util.ArrayList;
 
 public class ScriptExplorerActivity extends AppCompatActivity {
+
+    private ScriptExplorerAdapter adapter;
+    private RecyclerView recyclerView;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_script_explorer);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.script_root_container);
-        for(int i=0; i<200; i++){
-            View view = getLayoutInflater().inflate(R.layout.title_row, null);
-            ((TextView) view.findViewById(R.id.script_title)).setText("MyScript " + i);
-            linearLayout.addView(view);
-        }
+        recyclerView = findViewById(R.id.scriptRecyclerView);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        adapter = new ScriptExplorerAdapter(ScriptModel.getModel().getScripts(), this);
+        recyclerView.setAdapter(adapter);
+
+        fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
