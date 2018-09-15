@@ -2,7 +2,7 @@ package com.codeboard.htn.codeboard.model;
 
 import java.util.ArrayList;
 
-public interface ScriptFacade {
+public interface ScriptModelFacade {
 
     /**
      * Add a new script.

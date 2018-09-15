@@ -42,6 +42,33 @@ public class Script implements Serializable {
         this.language = language;
     }
 
+    /**
+     * Override equals method to ensure equality of serialized objects.
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+
+        if (obj instanceof Script) {
+            Script other = (Script)obj;
+
+            return  this.name.equals(other.name) &&
+                    this.script.equals(other.script) &&
+                    this.language == other.language;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 31*result + name.hashCode();
+        result = 31*result + script.hashCode();
+        return result;
+    }
+
     public enum Language {
 
         PYTHON("Python", ".py"),

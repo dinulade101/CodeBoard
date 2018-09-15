@@ -21,6 +21,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.codeboard.htn.codeboard.R;
 import com.codeboard.htn.codeboard.image.SnippetCaptureActivity;
+import com.codeboard.htn.codeboard.model.Script;
+import com.codeboard.htn.codeboard.model.ScriptModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,6 +32,7 @@ public class CodeEditorActivity extends AppCompatActivity {
     final static String URL = "https://httpbin.org/get";
     RequestQueue requestQueue;
     EditText editText;
+    private String scriptText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +43,8 @@ public class CodeEditorActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         editText =  findViewById(R.id.codeEditor);
-        editText.setText(bundle.getString(SnippetCaptureActivity.SCRIPT_KEY));
+        scriptText = bundle.getString(SnippetCaptureActivity.SCRIPT_KEY);
+        editText.setText(scriptText != null ? scriptText : "");
 
         requestQueue = Volley.newRequestQueue(this);
 
@@ -98,10 +102,14 @@ public class CodeEditorActivity extends AppCompatActivity {
         }
         if (id == R.id.save_code) {
             Toast.makeText(getApplicationContext(),"Saving Code",Toast.LENGTH_SHORT).show();
+            Script script = new Script("Hello World", scriptText, Script.Language.PYTHON);
+            ScriptModel.getModel().addScript(script);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+
 
 }
