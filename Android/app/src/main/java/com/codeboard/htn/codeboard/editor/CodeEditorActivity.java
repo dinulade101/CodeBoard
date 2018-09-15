@@ -13,10 +13,23 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.codeboard.htn.codeboard.R;
 import com.codeboard.htn.codeboard.image.SnippetCaptureActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class CodeEditorActivity extends AppCompatActivity {
+    //currently a test url
+    final static String URL = "https://httpbin.org/get";
+    RequestQueue requestQueue;
+    EditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,10 +39,10 @@ public class CodeEditorActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Bundle bundle = getIntent().getExtras();
-        EditText editText =  findViewById(R.id.codeEditor);
+        editText =  findViewById(R.id.codeEditor);
         editText.setText(bundle.getString(SnippetCaptureActivity.SCRIPT_KEY));
 
-
+        requestQueue = Volley.newRequestQueue(this);
 
     }
     @Override
@@ -43,6 +56,33 @@ public class CodeEditorActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(),"Sending Code",Toast.LENGTH_LONG).show();
 
     }
+    public void makeVolleyRequest(){
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("HTTP RESPONSE","Response: " + response.toString());
+                        String origin;
+                        try{
+                            origin = response.getString("origin");
+                        }catch(JSONException e){
+                            origin = "JSON FAIL:" + e.getMessage();
+                        }
+
+                        editText.setText("HTTP succes: " + origin);
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("HTTP RESPONSE", "FAIL");
+                        editText.setText("HTTP FAIL:" +error.getMessage());
+
+                    }
+                });
+        requestQueue.add(jsonObjectRequest);
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -53,6 +93,7 @@ public class CodeEditorActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.execute_code) {
             Toast.makeText(getApplicationContext(),"Sending Code",Toast.LENGTH_SHORT).show();
+            makeVolleyRequest();
             return true;
         }
         if (id == R.id.save_code) {
