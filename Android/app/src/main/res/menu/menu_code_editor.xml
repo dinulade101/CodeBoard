@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.codeboard.htn.codeboard.explorer.ScriptExplorerActivity">
+    <item
+        android:id="@+id/execute_code"
+        android:icon="@android:drawable/ic_media_play"
+        android:title="Item"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/save_code"
+        android:icon="@android:drawable/ic_menu_save"
+        android:title="Save"
+        app:showAsAction="always" />
+</menu>

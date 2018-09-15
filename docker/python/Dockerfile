@@ -1,15 +1,7 @@
-FROM ubuntu:latest
+FROM python:3
 
-RUN apt-get update && \
-    apt-get install -y \
-            python \
-    && rm -rf /var/lib/apt/lists/*
+WORKDIR /usr/src/app
 
-RUN  pip3 install numpy && \
-     pip3 install matplotlib
+RUN pip install numpy
 
-WORKDIR /root/examples
-
-COPY ./main.py .
-
-CMD ["python3 main.py"]
+CMD [ "python", "./main.py" ]
