@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.codeboard.htn.codeboard.R;
 
@@ -52,10 +53,11 @@ public class ScriptExplorerActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
+        Toast.makeText(getApplicationContext(),"Sending Code",Toast.LENGTH_SHORT);
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+
+            return false;
         }
 
         return super.onOptionsItemSelected(item);
