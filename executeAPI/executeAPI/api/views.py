@@ -34,10 +34,10 @@ def executeCode(request):
     else:
         output = "Invalid language"
 
-    #codeFile.write(codeFile) 
-    #codeFile.close()
+    codeFile.write(code) 
+    codeFile.close()
 
-    #subprocess.call(["docker", "run"])
+    subprocess.call(["docker", "run"])
 
     outputData = {"lang":lang, "output":output}
     return JsonResponse(outputData)
