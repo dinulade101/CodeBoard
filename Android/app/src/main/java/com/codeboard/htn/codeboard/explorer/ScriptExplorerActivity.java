@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.codeboard.htn.codeboard.R;
 
@@ -19,6 +21,13 @@ public class ScriptExplorerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_script_explorer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.script_root_container);
+        for(int i=0; i<200; i++){
+            View view = getLayoutInflater().inflate(R.layout.title_row, null);
+            ((TextView) view.findViewById(R.id.script_title)).setText("MyScript " + i);
+            linearLayout.addView(view);
+        }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
