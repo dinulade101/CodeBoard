@@ -3,7 +3,7 @@
     package="com.codeboard.htn.codeboard">
 
     <application
-        android:name="com.codeboard.htn.codeboard.CodeBoard"
+        android:name="com.codeboard.htn.codeboard.util.CodeBoard"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -12,8 +12,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".explorer.ScriptExplorerActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,5 +29,6 @@
     <!-- Camera requirement -->
     <uses-feature android:name="android.hardware.camera" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

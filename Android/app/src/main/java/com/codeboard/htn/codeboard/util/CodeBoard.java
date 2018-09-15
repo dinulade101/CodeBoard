@@ -1,4 +1,4 @@
-package com.codeboard.htn.codeboard;
+package com.codeboard.htn.codeboard.util;
 
 import android.app.Application;
 import android.content.Context;

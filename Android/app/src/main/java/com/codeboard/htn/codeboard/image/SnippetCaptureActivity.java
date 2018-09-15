@@ -4,8 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.renderscript.Script;
-import android.support.annotation.RequiresPermission;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -15,7 +13,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.TextView;
 
-import com.codeboard.htn.codeboard.CodeBoard;
+import com.codeboard.htn.codeboard.util.CodeBoard;
 import com.codeboard.htn.codeboard.editor.CodeEditorActivity;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -27,7 +25,7 @@ import java.io.IOException;
 
 public final class SnippetCaptureActivity extends AppCompatActivity {
 
-    private static final String SCRIPT_KEY = "SCRIPT";
+    public static final String SCRIPT_KEY = "SCRIPT";
     private static final int  REQUEST_CAMERA_PERMISSION_ID = 101;
     private final TextRecognizer TRANSLATOR = new TextRecognizer.Builder(CodeBoard.getContext()).build();
     private StringBuilder scriptBuilder = new StringBuilder();
