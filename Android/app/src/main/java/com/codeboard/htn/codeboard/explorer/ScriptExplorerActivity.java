@@ -64,6 +64,7 @@ public class ScriptExplorerActivity extends AppCompatActivity {
             return false;
         }
 
+
         return super.onOptionsItemSelected(item);
     }
 }

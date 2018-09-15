@@ -7,4 +7,9 @@
         android:icon="@android:drawable/ic_media_play"
         android:title="Item"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/save_code"
+        android:icon="@android:drawable/ic_menu_save"
+        android:title="Save"
+        app:showAsAction="always" />
 </menu>
