@@ -6,31 +6,40 @@ from rest_framework.response import Response
 from django.http import JsonResponse
 from django.core import serializers
 from django.conf import settings
+
 import json
+import os
+import subprocess
 
 from django.http import HttpResponse
 # Create your views here.
 
 @api_view(["POST"])
-def executeCode(codeData):
+def executeCode(request):
 
-    return codeData
     lang_to_file = {"python":"main.py","CPP":"main.cpp", "Java":"main.java"}
-    codeData = json.loads(codeData)
-    lang = codeData["language"]
-    code = codeData["code"]
+    lang = request.POST["language"]
+    code = request.POST["code"]
 
+    os.chdir("../../codeexecution")
     if lang == "Python":
-        output = "Hello This is python"
+        codeFile = open("main.py", "w")
+        codeFile.write(code) 
+        codeFile.close()
+        subprocess.call(["docker", "run", "--rm", "codeboardpython" ]) 
     elif lang == "C++":
-        output = "This is C++"
+        codeFile = open("main.cpp", "w")
+        codeFile.write(code) 
+        codeFile.close()
     elif lang == "Java":
-        output = "This is Java"
+        codeFile = open("main.java", "w")
+        codeFile.write(code) 
+        codeFile.close()
     else:
         output = "Invalid language"
 
 
-
+#docker run -it --rm --name my-running-app my-python-app
+ 
     outputData = {"lang":lang, "output":output}
-    return json.dumps(outputData)
-    #return HttpResponse("<h1>This is a test")
+    return JsonResponse(outputData)
