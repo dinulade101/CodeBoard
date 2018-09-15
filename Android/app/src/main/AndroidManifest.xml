@@ -21,7 +21,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".image.SnippetCaptureActivity" />
-        <activity android:name=".editor.CodeEditorActivity"></activity>
+        <activity
+            android:name=".editor.CodeEditorActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            ></activity>
     </application>
 
     <!-- Camera requirement -->
