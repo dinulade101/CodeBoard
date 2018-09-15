@@ -15,25 +15,27 @@ from django.http import HttpResponse
 # Create your views here.
 
 @api_view(["POST"])
-def executeCode(codeData):
+def executeCode(request):
 
     lang_to_file = {"python":"main.py","CPP":"main.cpp", "Java":"main.java"}
-    codeData = json.loads(codeData)
-    lang = codeData["language"]
-    code = codeData["code"]
+    lang = request.POST["language"]
+    code = request.POST["code"]
 
-    os.chdir("../../../codeexecution")
+    os.chdir("../../codeexecution")
     if lang == "Python":
         codeFile = open("main.py", "w") 
+        output = lang
     elif lang == "C++":
         codeFile = open("main.cpp", "w")
+        output = lang
     elif lang == "Java":
         codeFile = open("main.java", "w")
+        output = lang
     else:
         output = "Invalid language"
 
-    codeFile.write(codeFile) 
-    codeFile.close()
+    #codeFile.write(codeFile) 
+    #codeFile.close()
 
     #subprocess.call(["docker", "run"])
 
