@@ -17,16 +17,15 @@ from django.http import HttpResponse
 @api_view(["POST"])
 def executeCode(request):
 
-    lang_to_file = {"python":"main.py","CPP":"main.cpp", "Java":"main.java"}
     lang = request.POST["language"]
     code = request.POST["code"]
 
-    os.chdir("../../codeexecution")
     if lang == "Python":
         codeFile = open("main.py", "w")
         codeFile.write(code) 
         codeFile.close()
-        subprocess.call(["docker", "run", "--rm", "codeboardpython" ]) 
+        subprocess.call(["docker", "run", "--rm", "-v", "~/codeboard/executeAPI/executeAPI/api/main.py:/", "codeboardpython", "codeboardpython" ])
+        #docker run -it --name repoResearch -v <absolute/path/to/mount/directory>:/root/work repoemacs 
     elif lang == "C++":
         codeFile = open("main.cpp", "w")
         codeFile.write(code) 
