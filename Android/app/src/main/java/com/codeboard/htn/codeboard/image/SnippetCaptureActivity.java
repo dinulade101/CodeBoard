@@ -30,7 +30,7 @@ public final class SnippetCaptureActivity extends AppCompatActivity {
     private static final String SCRIPT_KEY = "SCRIPT";
     private static final int  REQUEST_CAMERA_PERMISSION_ID = 101;
     private final TextRecognizer TRANSLATOR = new TextRecognizer.Builder(CodeBoard.getContext()).build();
-    private StringBuilder scriptBuilder;
+    private StringBuilder scriptBuilder = new StringBuilder();
 
     private CameraSource cameraSource;
     private TextView textView;
