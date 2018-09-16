@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codeboard.htn.codeboard.R;
+import com.codeboard.htn.codeboard.editor.CodeEditorActivity;
 import com.codeboard.htn.codeboard.image.SnippetCaptureActivity;
 import com.codeboard.htn.codeboard.model.Script;
 import com.codeboard.htn.codeboard.model.ScriptModel;
@@ -53,8 +54,20 @@ public class ScriptExplorerActivity extends AppCompatActivity implements Observe
         });
     }
 
-    private void prepareForSnippet() {
+    /**
+     * Jump to snippet capture activity.
+     */
+    public void prepareForSnippet() {
         startActivity(new Intent(this, SnippetCaptureActivity.class));
+    }
+
+    /**
+     * Jump to editor activity.
+     */
+    public void displaySnippet(Script selectedScript) {
+        Intent intent = new Intent(this, CodeEditorActivity.class);
+        intent.putExtra(Script.SCRIPT_KEY, selectedScript);
+        startActivity(intent);
     }
 
     @Override

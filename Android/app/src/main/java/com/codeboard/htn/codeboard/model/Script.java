@@ -1,15 +1,23 @@
 package com.codeboard.htn.codeboard.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents a program.
  */
 public class Script implements Serializable {
 
+    public static final String SCRIPT_KEY = "SERIALIZED_SCRIPT_OBJ";
+
     private String name;
     private String script;
     private Language language;
+
+    public Script() {
+        this("","",Language.PYTHON);
+    }
 
     public Script(String name, String script, Language language) {
         this.name = name;
@@ -72,7 +80,7 @@ public class Script implements Serializable {
     public enum Language {
 
         PYTHON("Python", ".py"),
-        JAVA("Java", ".java");
+        CPP("C++", ".cpp");
 
         private String name;
         private String fileExtension;
@@ -86,6 +94,11 @@ public class Script implements Serializable {
             return name;
         }
 
+        @Override
+        public String toString() {
+            return getName();
+        }
+
         public String getFileExtension() {
             return fileExtension;
         }
@@ -97,6 +110,14 @@ public class Script implements Serializable {
                 }
             }
             return null;
+        }
+
+        public static List<String> getLanguageCategories() {
+            List<String> categories = new ArrayList<>();
+            for (Language l : Language.values()) {
+                categories.add(l.toString());
+            }
+            return categories;
         }
     }
 }

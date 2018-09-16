@@ -12,7 +12,9 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.codeboard.htn.codeboard.model.Script;
 import com.codeboard.htn.codeboard.util.CodeBoard;
 import com.codeboard.htn.codeboard.editor.CodeEditorActivity;
 import com.google.android.gms.vision.CameraSource;
@@ -25,7 +27,6 @@ import java.io.IOException;
 
 public final class SnippetCaptureActivity extends AppCompatActivity {
 
-    public static final String SCRIPT_KEY = "SCRIPT";
     private static final int  REQUEST_CAMERA_PERMISSION_ID = 101;
     private final TextRecognizer TRANSLATOR = new TextRecognizer.Builder(CodeBoard.getContext()).build();
     private StringBuilder scriptBuilder = new StringBuilder();
@@ -47,16 +48,17 @@ public final class SnippetCaptureActivity extends AppCompatActivity {
         acceptTranslateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                prepareScript();
+                loadScriptInEditor();
             }
         });
 
         initCameraSource();
     }
 
-    private void prepareScript() {
+    private void loadScriptInEditor() {
         Intent editorIntent = new Intent(this, CodeEditorActivity.class);
-        editorIntent.putExtra(SCRIPT_KEY, scriptBuilder.toString());
+        Script script = new Script("Main", scriptBuilder.toString(), Script.Language.PYTHON);
+        editorIntent.putExtra(Script.SCRIPT_KEY, script);
         startActivity(editorIntent);
     }
 
@@ -89,13 +91,11 @@ public final class SnippetCaptureActivity extends AppCompatActivity {
             }
 
             @Override
-            public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-
-            }
+            public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {}
 
             @Override
             public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-
+                cameraSource.release();
             }
         });
 
@@ -148,6 +148,6 @@ public final class SnippetCaptureActivity extends AppCompatActivity {
     }
 
     private void displayError(String msg) {
-
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 }

@@ -1,15 +1,13 @@
 package com.codeboard.htn.codeboard.editor;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -21,7 +19,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.codeboard.htn.codeboard.R;
-import com.codeboard.htn.codeboard.image.SnippetCaptureActivity;
 import com.codeboard.htn.codeboard.model.Script;
 import com.codeboard.htn.codeboard.model.ScriptModel;
 
@@ -32,10 +29,13 @@ public class CodeEditorActivity extends AppCompatActivity {
     //currently a test url
     final static String URL = "https://httpbin.org/get";
     RequestQueue requestQueue;
-    EditText editText;
-    EditText scriptName;
-    Spinner languageSpinner;
-    private String scriptText;
+
+    private EditText editText;
+    private EditText scriptName;
+    private Spinner languageSpinner;
+    private Script script = new Script();
+    private ArrayAdapter<String> languageAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,14 +43,36 @@ public class CodeEditorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_code_editor);
 
         Bundle bundle = getIntent().getExtras();
+        if (bundle != null && bundle.get(Script.SCRIPT_KEY) != null) {
+            script = (Script)bundle.get(Script.SCRIPT_KEY);
+        }
+
         languageSpinner = findViewById(R.id.languageSpinner);
+        languageAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Script.Language.getLanguageCategories());
+        languageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        languageSpinner.setAdapter(languageAdapter);
+
+        languageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Script.Language selected = Script.Language.getLanguageForValue(parent.getItemAtPosition(position).toString());
+                script.setLanguage(selected != null ? selected : Script.Language.PYTHON);
+                Toast.makeText(getApplicationContext(),"Script lang is: " + script.getLanguage().toString(), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
         editText =  findViewById(R.id.scriptContentET);
         scriptName = findViewById(R.id.scriptNameET);
-        scriptText = bundle.getString(SnippetCaptureActivity.SCRIPT_KEY);
-        editText.setText(scriptText != null ? scriptText : "");
-        requestQueue = Volley.newRequestQueue(this);
 
+        editText.setText(script.getScript());
+        scriptName.setText(script.getName());
+        requestQueue = Volley.newRequestQueue(this);
     }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -104,7 +126,6 @@ public class CodeEditorActivity extends AppCompatActivity {
         }
         if (id == R.id.save_code) {
             Toast.makeText(getApplicationContext(),"Saving Code",Toast.LENGTH_SHORT).show();
-            Script script = new Script("Hello World", scriptText, Script.Language.PYTHON);
             ScriptModel.getModel().addScript(script);
             return true;
         }

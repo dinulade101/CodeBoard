@@ -42,7 +42,8 @@ public class ScriptExplorerAdapter extends RecyclerView.Adapter<ScriptExplorerAd
 
         @Override
         public void onClick(View view) {
-            // TODO: Notify parent activity of script to show in editor.
+            Script script = scripts.get(getAdapterPosition());
+            parent.displaySnippet(script);
         }
     }
 

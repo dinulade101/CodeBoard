@@ -27,8 +27,10 @@ public class ScriptModel extends Observable implements ScriptModelFacade {
 
     @Override
     public void addScript(Script script) {
-        scripts.add(script);
-        writeScriptData();
+        if (!scripts.contains(script)) {
+            scripts.add(script);
+            writeScriptData();
+        }
     }
 
     @Override
