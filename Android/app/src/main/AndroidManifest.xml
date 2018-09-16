@@ -21,8 +21,7 @@
         </activity>
         <activity android:name=".image.SnippetCaptureActivity" />
         <activity
-            android:name=".editor.CodeEditorActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".editor.CodeEditorActivity">
             ></activity>
     </application>
 
