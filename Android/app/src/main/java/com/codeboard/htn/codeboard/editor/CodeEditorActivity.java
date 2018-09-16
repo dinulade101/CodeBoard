@@ -15,21 +15,23 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.codeboard.htn.codeboard.R;
 import com.codeboard.htn.codeboard.model.Script;
 import com.codeboard.htn.codeboard.model.ScriptModel;
-import com.codeboard.htn.codeboard.util.CodeBoard;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class CodeEditorActivity extends AppCompatActivity {
     //currently a test url
@@ -82,7 +84,7 @@ public class CodeEditorActivity extends AppCompatActivity {
         editText.setTypeface(codeFont);
         output.setTypeface(codeFont);
 
-        requestQueue = Volley.newRequestQueue(CodeBoard.getContext());
+        requestQueue = Volley.newRequestQueue(this);
     }
 
 
@@ -98,24 +100,21 @@ public class CodeEditorActivity extends AppCompatActivity {
 
     }
     public void makeVolleyRequest(){
-        HashMap<String, String> requestParams = new HashMap<>();
-        requestParams.put("language", ((TextView) languageSpinner.getSelectedView()).getText().toString());
-        requestParams.put("code", editText.getText().toString());
-        Log.d("JSON SUCCESS:",requestParams.toString());
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.POST, URL, new JSONObject(requestParams), new Response.Listener<JSONObject>() {
+       
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL,new Response.Listener<String>() {
 
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onResponse(String response) {
                         Log.d("HTTP RESPONSE","Response: " + response.toString());
-                        String origin;
                         try{
-                            origin = response.getString("output");
-                        }catch(JSONException e){
-                            origin = "JSON FAIL:" + e.getMessage();
+                            JSONObject jsonResp = new JSONObject(response);
+                            output.setVisibility(View.VISIBLE);
+                            output.setText("Output: " + jsonResp.getString("output"));
+                        }catch(Exception e){
+                            Log.d("JSON error:", e.getMessage());
+                            output.setText("JSON ERROR");
                         }
-                        output.setVisibility(View.VISIBLE);
-                        output.setText("HTTP succes: " + origin);
+
                     }
                 }, new Response.ErrorListener() {
 
@@ -126,8 +125,18 @@ public class CodeEditorActivity extends AppCompatActivity {
                         output.setText("HTTP FAIL:" +error.getMessage());
 
                     }
-                });
-        requestQueue.add(jsonObjectRequest);
+                }){
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String,String> parameters = new HashMap<String,String>();
+                parameters.put("code",editText.getText().toString());
+                parameters.put("language",((TextView) languageSpinner.getSelectedView()).getText().toString());
+
+                return parameters;
+            }
+
+        };
+        requestQueue.add(stringRequest);
 
     }
     @Override
@@ -143,8 +152,6 @@ public class CodeEditorActivity extends AppCompatActivity {
                 makeVolleyRequest();
             case R.id.save_code:
                 Toast.makeText(getApplicationContext(),"Saving Code",Toast.LENGTH_SHORT).show();
-                script.setName(scriptName.getText().toString());
-                script.setScript(editText.getText().toString());
                 ScriptModel.getModel().addScript(script);
                 return true;
             case R.id.deleteBtn:
