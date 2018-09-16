@@ -1,6 +1,7 @@
 package com.codeboard.htn.codeboard.model;
 
 import java.util.ArrayList;
+import java.util.Observer;
 
 public interface ScriptModelFacade {
 
@@ -18,5 +19,9 @@ public interface ScriptModelFacade {
      * Remove a script.
      */
     void deleteScript(Script script);
+
+    void registerObserver(Observer obsv);
+
+    void removeObserver(Observer obsv);
 
 }

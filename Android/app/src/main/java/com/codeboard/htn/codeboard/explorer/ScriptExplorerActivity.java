@@ -37,6 +37,8 @@ public class ScriptExplorerActivity extends AppCompatActivity implements Observe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_script_explorer);
 
+        ScriptModel.getModel().registerObserver(this);
+
         recyclerView = findViewById(R.id.scriptRecyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);

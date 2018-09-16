@@ -17,6 +17,7 @@ import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Observable;
+import java.util.Observer;
 
 public class ScriptModel extends Observable implements ScriptModelFacade {
 
@@ -42,7 +43,22 @@ public class ScriptModel extends Observable implements ScriptModelFacade {
     }
 
     @Override
+    public void registerObserver(Observer obsv) {
+        addObserver(obsv);
+    }
+
+    @Override
+    public void removeObserver(Observer obsv) {
+        deleteObserver(obsv);
+    }
+
+    @Override
     public void deleteScript(Script script) {
+        if (scripts.contains(script)) {
+            scripts.remove(script);
+        }
+        writeScriptData();
+        notifyObservers();
     }
 
     public static ScriptModelFacade getModel() {

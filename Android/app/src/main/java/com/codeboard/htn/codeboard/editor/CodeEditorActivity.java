@@ -140,20 +140,19 @@ public class CodeEditorActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.execute_code) {
-            Toast.makeText(getApplicationContext(),"Sending Code",Toast.LENGTH_SHORT).show();
-            makeVolleyRequest();
-            return true;
-        }
-        if (id == R.id.save_code) {
-            Toast.makeText(getApplicationContext(),"Saving Code",Toast.LENGTH_SHORT).show();
-            ScriptModel.getModel().addScript(script);
-            return true;
-        }
+        switch (id)  {
+            case R.id.execute_code:
+                Toast.makeText(getApplicationContext(),"Sending Code",Toast.LENGTH_SHORT).show();
+                makeVolleyRequest();
+            case R.id.save_code:
+                Toast.makeText(getApplicationContext(),"Saving Code",Toast.LENGTH_SHORT).show();
+                ScriptModel.getModel().addScript(script);
+                return true;
+            case R.id.deleteBtn:
+                ScriptModel.getModel().deleteScript(script);
+                finish();
 
+        }
         return super.onOptionsItemSelected(item);
     }
-
-
 }
