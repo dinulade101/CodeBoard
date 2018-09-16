@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -33,6 +34,7 @@ public class CodeEditorActivity extends AppCompatActivity {
     RequestQueue requestQueue;
     EditText editText;
     EditText scriptName;
+    Spinner languageSpinner;
     private String scriptText;
 
     @Override
@@ -41,6 +43,7 @@ public class CodeEditorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_code_editor);
 
         Bundle bundle = getIntent().getExtras();
+        languageSpinner = findViewById(R.id.languageSpinner);
         editText =  findViewById(R.id.scriptContentET);
         scriptName = findViewById(R.id.scriptNameET);
         scriptText = bundle.getString(SnippetCaptureActivity.SCRIPT_KEY);
