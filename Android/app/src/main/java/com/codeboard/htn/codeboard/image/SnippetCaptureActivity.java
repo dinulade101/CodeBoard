@@ -109,7 +109,14 @@ public final class SnippetCaptureActivity extends AppCompatActivity {
 
             @Override
             public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-                cameraSource.release();
+                if(cameraSource != null){
+                    try{
+                        cameraSource.release();
+                    }catch(NullPointerException ignore){
+                        cameraSource = null;
+                    }
+
+                }
             }
         });
 
