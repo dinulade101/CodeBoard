@@ -11,15 +11,15 @@ import json
 import os
 import subprocess
 import os.path
-import autopep8
+from yapf.yapflib.yapf_api import FormatCode
 
 from django.http import HttpResponse
 # Create your views here.
 
 def formatCode(lang, code):
     if lang == "Python":
-        code = autopep8.fix_code(code)
-    print("Formatted", code)
+        code = FormatCode(code)
+
     outputData = {"lang":lang, "code":code}
     return JsonResponse(outputData)
 
@@ -38,25 +38,26 @@ def executeCode(request):
         codeFile = open("api/main.py", "w+")
         codeFile.write(code) 
         codeFile.close()
-        subprocess.call(["docker", "run", "--mount", "type=bind,source=/home/django/django_project/api,target=/usr/src/app", "--name", "code", "kaibailey/codeboardpython"])
-        os.remove("api/main.py")   
- #docker run --mount type=bind,source=/Users/dinula/repos/CodeBoard/executeAPI/executeAPI/api,target=/usr/src/app --name codepy codeboardpython
+        try:
+            subprocess.call(["docker", "run", "--mount", "type=bind,source=/home/django/django_project/api,target=/usr/src/app", "--name", "code", "kaibailey/codeboardpython"])
+    #docker run --mount type=bind,source=/Users/dinula/repos/CodeBoard/executeAPI/executeAPI/api,target=/usr/src/app --name codepy codeboardpython
     elif lang == "C++":
-        codeFile = open("api/main.cpp", "w+")
+        codeFile = open("main.cpp", "w+")
         codeFile.write(code) 
         codeFile.close()
-        subprocess.call(["docker", "run", "--mount", "type=bind,source=/home/django/django_project/api,target=/usr/src/codeexec", "--name", "code", "kaibailey/codeboardcpp"])
-        os.remove("api/main.cpp")
+        subprocess.call(["docker", "run", "--mount", "type=bind,source=/home/django/django_project/api,target=/usr/src/app", "--name", "code", "kaibailey/codeboardcpp"])
     else:
         output = "Invalid language"
-        result = output
 
+#    if os.path.isfile("api/log.txt"):
+#        os.remove("api/log.txt")
+    output = subprocess.run(["docker", "logs", "code"], stdout=subprocess.PIPE)
+    output = output.stdout.decode('utf-8')
+#    subprocess.call(["docker", "logs", "code", ">", "log.txt"])
+   # subprocess.call(["docker", "rm", "code"])
 
-    output = subprocess.run(["docker", "logs", "code"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    result = output.stdout.decode('utf-8')
-    result += output.stderr.decode('utf-8')
-    subprocess.call(["docker", "rm", "code"])
+    os.remove("api/main.py")
 
-    outputData = {"lang":lang, "output":result}
+    outputData = {"lang":lang, "output":output}
     return JsonResponse(outputData)
 
