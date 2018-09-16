@@ -31,13 +31,13 @@ def executeCode(request):
         codeFile = open("api/main.py", "w+")
         codeFile.write(code) 
         codeFile.close()
-        subprocess.call(["docker", "run", "--mount", "type=bind,source=/Users/dinula/repos/CodeBoard/executeAPI/executeAPI/api,target=/usr/src/app", "--name", "code", "kaibailey/codeboardpython"])
+        subprocess.call(["docker", "run", "--mount", "type=bind,source=/root/CodeBoard/executeAPI/executeAPI/api,target=/usr/src/app", "--name", "code", "kaibailey/codeboardpython"])
         #docker run --mount type=bind,source=/Users/dinula/repos/CodeBoard/executeAPI/executeAPI/api,target=/usr/src/app --name codepy codeboardpython
     elif lang == "C++":
         codeFile = open("main.cpp", "w+")
         codeFile.write(code) 
         codeFile.close()
-        subprocess.call(["docker", "run", "--mount", "type=bind,source=/Users/dinula/repos/CodeBoard/executeAPI/executeAPI/api,target=/usr/src/app", "--name", "code", "kaibailey/codeboardcpp"])
+        subprocess.call(["docker", "run", "--mount", "type=bind,source=/root/CodeBoard/executeAPI/executeAPI/api,target=/usr/src/app", "--name", "code", "kaibailey/codeboardcpp"])
     else:
         output = "Invalid language"
 
