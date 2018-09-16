@@ -22,8 +22,10 @@ import com.codeboard.htn.codeboard.model.ScriptModel;
 import com.codeboard.htn.codeboard.util.CodeBoard;
 
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
-public class ScriptExplorerActivity extends AppCompatActivity {
+public class ScriptExplorerActivity extends AppCompatActivity implements Observer {
 
     private ScriptExplorerAdapter adapter;
     private RecyclerView recyclerView;
@@ -74,8 +76,11 @@ public class ScriptExplorerActivity extends AppCompatActivity {
 
             return false;
         }
-
-
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        adapter.notifyDataSetChanged();
     }
 }

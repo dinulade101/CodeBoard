@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -32,20 +33,21 @@ public class CodeEditorActivity extends AppCompatActivity {
     final static String URL = "https://httpbin.org/get";
     RequestQueue requestQueue;
     EditText editText;
+    EditText scriptName;
+    Spinner languageSpinner;
     private String scriptText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_code_editor);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         Bundle bundle = getIntent().getExtras();
-        editText =  findViewById(R.id.codeEditor);
+        languageSpinner = findViewById(R.id.languageSpinner);
+        editText =  findViewById(R.id.scriptContentET);
+        scriptName = findViewById(R.id.scriptNameET);
         scriptText = bundle.getString(SnippetCaptureActivity.SCRIPT_KEY);
         editText.setText(scriptText != null ? scriptText : "");
-
         requestQueue = Volley.newRequestQueue(this);
 
     }
@@ -109,7 +111,6 @@ public class CodeEditorActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
 
 
 }
