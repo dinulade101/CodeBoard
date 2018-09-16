@@ -28,7 +28,7 @@ import java.io.IOException;
 public final class SnippetCaptureActivity extends AppCompatActivity {
 
     private static final int  REQUEST_CAMERA_PERMISSION_ID = 101;
-    private final TextRecognizer TRANSLATOR = new TextRecognizer.Builder(CodeBoard.getContext()).build();
+    private TextRecognizer TRANSLATOR;
     private StringBuilder scriptBuilder = new StringBuilder();
 
     private CameraSource cameraSource;
@@ -55,6 +55,19 @@ public final class SnippetCaptureActivity extends AppCompatActivity {
         initCameraSource();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        textView.setText("");
+        initCameraSource();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        cameraSource.release();
+    }
+
     private void loadScriptInEditor() {
         Intent editorIntent = new Intent(this, CodeEditorActivity.class);
         Script script = new Script("Main", scriptBuilder.toString(), Script.Language.PYTHON);
@@ -63,6 +76,7 @@ public final class SnippetCaptureActivity extends AppCompatActivity {
     }
 
     private void initCameraSource() {
+        TRANSLATOR = new TextRecognizer.Builder(CodeBoard.getContext()).build();
         if (!TRANSLATOR.isOperational()) {
             displayError("HARDCODED ERROR MESSAGE");
         }
@@ -95,7 +109,14 @@ public final class SnippetCaptureActivity extends AppCompatActivity {
 
             @Override
             public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-                cameraSource.release();
+                if(cameraSource != null){
+                    try{
+                        cameraSource.release();
+                    }catch(NullPointerException ignore){
+                        cameraSource = null;
+                    }
+
+                }
             }
         });
 
