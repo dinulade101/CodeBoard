@@ -1,6 +1,7 @@
 package com.codeboard.htn.codeboard.editor;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -34,6 +36,7 @@ public class CodeEditorActivity extends AppCompatActivity {
     RequestQueue requestQueue;
     EditText editText;
     EditText scriptName;
+    TextView output;
     Spinner languageSpinner;
     private String scriptText;
 
@@ -48,6 +51,12 @@ public class CodeEditorActivity extends AppCompatActivity {
         scriptName = findViewById(R.id.scriptNameET);
         scriptText = bundle.getString(SnippetCaptureActivity.SCRIPT_KEY);
         editText.setText(scriptText != null ? scriptText : "");
+        output = (TextView) findViewById(R.id.outputTV);
+
+        Typeface codeFont = Typeface.createFromAsset(getAssets(),"fonts/cmuntt.ttf");
+        editText.setTypeface(codeFont);
+        output.setTypeface(codeFont);
+
         requestQueue = Volley.newRequestQueue(this);
 
     }
