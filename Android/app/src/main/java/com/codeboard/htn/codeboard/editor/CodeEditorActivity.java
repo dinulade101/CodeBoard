@@ -30,7 +30,7 @@ import org.json.JSONObject;
 
 public class CodeEditorActivity extends AppCompatActivity {
     //currently a test url
-    final static String URL = "https://codeboarddj.azurewebsites.net/";
+    final static String URL = "http://159.203.4.116:8080/execute/";
     RequestQueue requestQueue;
 
     private EditText editText;
