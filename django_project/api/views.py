@@ -16,51 +16,47 @@ from yapf.yapflib.yapf_api import FormatCode
 from django.http import HttpResponse
 # Create your views here.
 
+def formatCode(lang, code):
+    if lang == "Python":
+        code = FormatCode(code)
+
+    outputData = {"lang":lang, "code":code}
+    return JsonResponse(outputData)
+
 @api_view(["POST"])
 def executeCode(request):
-
-    try: 
-       codeStyle = request.POST["style"]
-       lang = request.POST["language"]
-       formatCode(lang, codeStyle)
-    except:
+    print(request.POST)
+    if "code" in request.POST: 
         code = request.POST["code"]
         lang = request.POST["language"]
+    else:
+        codeStyle = request.POST["style"]
+        lang = request.POST["language"]
+        return formatCode(lang, codeStyle)
 
     if lang == "Python":
         codeFile = open("api/main.py", "w+")
         codeFile.write(code) 
         codeFile.close()
-        subprocess.call(["docker", "run", "--mount", "type=bind,source=/root/CodeBoard/executeAPI/executeAPI/api,target=/usr/src/app", "--name", "code", "kaibailey/codeboardpython"])
+        subprocess.call(["docker", "run", "--mount", "type=bind,source=/home/django/django_project/api,target=/usr/src/app", "--name", "code", "kaibailey/codeboardpython"])
         #docker run --mount type=bind,source=/Users/dinula/repos/CodeBoard/executeAPI/executeAPI/api,target=/usr/src/app --name codepy codeboardpython
     elif lang == "C++":
         codeFile = open("main.cpp", "w+")
         codeFile.write(code) 
         codeFile.close()
-        subprocess.call(["docker", "run", "--mount", "type=bind,source=/root/CodeBoard/executeAPI/executeAPI/api,target=/usr/src/app", "--name", "code", "kaibailey/codeboardcpp"])
+        subprocess.call(["docker", "run", "--mount", "type=bind,source=/home/django/django_project/api,target=/usr/src/app", "--name", "code", "kaibailey/codeboardcpp"])
     else:
         output = "Invalid language"
 
-    if os.path.isfile("api/log.txt"):
-        os.remove("api/log.txt")
-
-    subprocess.call(["docker", "logs", "code", ">", "log.txt"])
+#    if os.path.isfile("api/log.txt"):
+#        os.remove("api/log.txt")
+    output = subprocess.run(["docker", "logs", "code"], stdout=subprocess.PIPE)
+    output = output.stdout.decode('utf-8')
+#    subprocess.call(["docker", "logs", "code", ">", "log.txt"])
     subprocess.call(["docker", "rm", "code"])
 
-    with open("api/log.txt") as f:
-        output = f.read()
-
-    os.remove("api/log.txt")
     os.remove("api/main.py")
 
     outputData = {"lang":lang, "output":output}
     return JsonResponse(outputData)
 
-
-    def formatCode(lang, code):
-        if lang == "Python":
-            code = formatCode(code)
-
-        outputData = {"lang":lang, "output":output}
-        return JsonResponse(outputData)
-            
