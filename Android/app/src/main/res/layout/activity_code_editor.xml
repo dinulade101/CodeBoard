@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
     tools:context=".editor.CodeEditorActivity">
 
     <android.support.v7.widget.CardView
@@ -14,6 +15,7 @@
         android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"
         android:elevation="5dp"
+        app:cardBackgroundColor="@color/colorPrimary"
         app:cardCornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,16 +35,17 @@
                 android:orientation="horizontal">
 
                 <EditText
+                    android:id="@+id/scriptNameET"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="match_parent"
-                    android:id="@+id/scriptNameET"/>
+                    android:layout_weight="1"
+                    android:textColor="@color/colorLight" />
 
 
                 <Spinner
+                    android:id="@+id/languageSpinner"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:id="@+id/languageSpinner"
                     android:entries="@array/languages">
 
                 </Spinner>
@@ -56,19 +59,21 @@
 
 
             <EditText
+                android:id="@+id/scriptContentET"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="top|left"
-                android:id="@+id/scriptContentET"/>
+                android:textColor="@color/colorLight" />
 
             <TextView
-                android:layout_width="match_parent"
                 android:id="@+id/outputTV"
+                android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:scrollbarStyle="insideInset"
-                android:visibility="gone"/>
+                android:textColor="@color/colorLight"
+                android:visibility="gone" />
 
         </LinearLayout>
 

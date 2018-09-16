@@ -24,9 +24,12 @@ import com.android.volley.toolbox.Volley;
 import com.codeboard.htn.codeboard.R;
 import com.codeboard.htn.codeboard.model.Script;
 import com.codeboard.htn.codeboard.model.ScriptModel;
+import com.codeboard.htn.codeboard.util.CodeBoard;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
 
 public class CodeEditorActivity extends AppCompatActivity {
     //currently a test url
@@ -79,7 +82,7 @@ public class CodeEditorActivity extends AppCompatActivity {
         editText.setTypeface(codeFont);
         output.setTypeface(codeFont);
 
-        requestQueue = Volley.newRequestQueue(this);
+        requestQueue = Volley.newRequestQueue(CodeBoard.getContext());
     }
 
 
@@ -95,23 +98,19 @@ public class CodeEditorActivity extends AppCompatActivity {
 
     }
     public void makeVolleyRequest(){
-        JSONObject requestObject = new JSONObject();
-        try {
-            requestObject.put("language", ((TextView) languageSpinner.getSelectedView()).getText());
-            requestObject.put("code", editText.getText().toString());
-        }catch(JSONException e){
-            Log.d("JSON FAIL:", e.getMessage());
-        }
-        Log.d("JSON SUCCESS:",requestObject.toString());
+        HashMap<String, String> requestParams = new HashMap<>();
+        requestParams.put("language", ((TextView) languageSpinner.getSelectedView()).getText().toString());
+        requestParams.put("code", editText.getText().toString());
+        Log.d("JSON SUCCESS:",requestParams.toString());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.POST, URL, requestObject, new Response.Listener<JSONObject>() {
+                (Request.Method.POST, URL, new JSONObject(requestParams), new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("HTTP RESPONSE","Response: " + response.toString());
                         String origin;
                         try{
-                            origin = response.getString("origin");
+                            origin = response.getString("output");
                         }catch(JSONException e){
                             origin = "JSON FAIL:" + e.getMessage();
                         }
@@ -144,6 +143,8 @@ public class CodeEditorActivity extends AppCompatActivity {
                 makeVolleyRequest();
             case R.id.save_code:
                 Toast.makeText(getApplicationContext(),"Saving Code",Toast.LENGTH_SHORT).show();
+                script.setName(scriptName.getText().toString());
+                script.setScript(editText.getText().toString());
                 ScriptModel.getModel().addScript(script);
                 return true;
             case R.id.deleteBtn:
