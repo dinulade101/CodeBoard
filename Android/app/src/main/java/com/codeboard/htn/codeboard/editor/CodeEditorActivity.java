@@ -61,7 +61,6 @@ public class CodeEditorActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Script.Language selected = Script.Language.getLanguageForValue(parent.getItemAtPosition(position).toString());
                 script.setLanguage(selected != null ? selected : Script.Language.PYTHON);
-                Toast.makeText(getApplicationContext(),"Script lang is: " + script.getLanguage().toString(), Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -73,8 +72,7 @@ public class CodeEditorActivity extends AppCompatActivity {
 
         editText.setText(script.getScript());
         scriptName.setText(script.getName());
-        scriptText = bundle.getString(Script.SCRIPT_KEY);
-        editText.setText(scriptText != null ? scriptText : "");
+        editText.setText(script.getScript());
         output = findViewById(R.id.outputTV);
 
         Typeface codeFont = Typeface.createFromAsset(getAssets(),"fonts/cmuntt.ttf");

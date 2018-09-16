@@ -12,17 +12,20 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".explorer.ScriptExplorerActivity"
-            android:label="@string/app_name">
+            android:label="@string/ScriptsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".image.SnippetCaptureActivity" />
         <activity
-            android:name=".editor.CodeEditorActivity">
-            ></activity>
+            android:name=".image.SnippetCaptureActivity"
+            android:label="@string/SnippetActivity"/>
+
+        <activity
+            android:name=".editor.CodeEditorActivity"
+            android:label="@string/EditorActivity"/>
     </application>
 
     <!-- Camera requirement -->

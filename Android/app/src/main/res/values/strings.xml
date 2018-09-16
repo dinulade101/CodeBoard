@@ -6,4 +6,10 @@
         <item>Python</item>
         <item>C++</item>
     </string-array>
+    
+    
+    <string name="ScriptsActivity">Programs</string>
+    <string name="SnippetActivity">New Code Snippet</string>
+    <string name="EditorActivity">Editor</string>
+
 </resources>
