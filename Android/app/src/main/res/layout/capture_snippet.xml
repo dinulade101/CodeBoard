@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/colorPrimaryDark"
     android:weightSum="5">
 
     <LinearLayout
@@ -27,7 +28,7 @@
             android:layout_margin="8dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:textColor="@android:color/black"
+            android:textColor="@color/colorLight"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -40,8 +41,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:layout_marginRight="16dp"
-        android:src="@drawable/ic_check_white_24dp"
-        android:tint="@android:color/white"
+        android:src="@drawable/ic_check_light_24dp"
+        android:tint="@color/colorPrimary"
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
