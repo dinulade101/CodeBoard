@@ -21,24 +21,28 @@ def executeCode(request):
     code = request.POST["code"]
 
     if lang == "Python":
-        codeFile = open("main.py", "w")
+        codeFile = open("api/main.py", "w+")
         codeFile.write(code) 
         codeFile.close()
-        subprocess.call(["docker", "run", "--rm", "-v", "~/codeboard/executeAPI/executeAPI/api/main.py:/", "codeboardpython", "codeboardpython" ])
-        #docker run -it --name repoResearch -v <absolute/path/to/mount/directory>:/root/work repoemacs 
+        subprocess.call(["docker", "run", "--mount", "type=bind,source=/Users/dinula/repos/CodeBoard/executeAPI/executeAPI/api,target=/usr/src/app", "--name", "code", "codeboardpython"])
+        #docker run --mount type=bind,source=/Users/dinula/repos/CodeBoard/executeAPI/executeAPI/api,target=/usr/src/app --name codepy codeboardpython
     elif lang == "C++":
-        codeFile = open("main.cpp", "w")
+        codeFile = open("main.cpp", "w+")
         codeFile.write(code) 
         codeFile.close()
-    elif lang == "Java":
-        codeFile = open("main.java", "w")
-        codeFile.write(code) 
-        codeFile.close()
+        subprocess.call(["docker", "run", "--mount", "type=bind,source=/Users/dinula/repos/CodeBoard/executeAPI/executeAPI/api,target=/usr/src/app", "--name", "code", "codeboardcpp"])
     else:
         output = "Invalid language"
 
+    subprocess.call(["docker", "logs", "code", ">", "log.txt"])
+    subprocess.call(["docker", "rm", "code"])
 
-#docker run -it --rm --name my-running-app my-python-app
- 
+    with open("api/log.txt") as f:
+        output = f.read()
+
+    #os.remove("api/log.txt")
+    #os.remove("api/main.py")
+
+
     outputData = {"lang":lang, "output":output}
     return JsonResponse(outputData)
