@@ -72,6 +72,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:scrollbarStyle="insideInset"
+                android:paddingHorizontal="5dp"
                 android:textColor="@color/colorLight"
                 android:visibility="gone" />
 
