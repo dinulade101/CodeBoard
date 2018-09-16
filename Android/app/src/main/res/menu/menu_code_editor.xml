@@ -4,12 +4,18 @@
     tools:context="com.codeboard.htn.codeboard.explorer.ScriptExplorerActivity">
     <item
         android:id="@+id/execute_code"
-        android:icon="@android:drawable/ic_media_play"
+        android:icon="@drawable/ic_play_arrow_white_24dp"
         android:title="Item"
         app:showAsAction="always" />
     <item
         android:id="@+id/save_code"
-        android:icon="@android:drawable/ic_menu_save"
+        android:icon="@drawable/ic_save_white_24dp"
+        android:title="Save"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/deleteBtn"
+        android:icon="@drawable/ic_delete_white_24dp"
         android:title="Save"
         app:showAsAction="always" />
 </menu>

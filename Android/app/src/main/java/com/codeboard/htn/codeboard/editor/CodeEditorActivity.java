@@ -75,7 +75,7 @@ public class CodeEditorActivity extends AppCompatActivity {
         scriptName.setText(script.getName());
         scriptText = bundle.getString(Script.SCRIPT_KEY);
         editText.setText(scriptText != null ? scriptText : "");
-        output = (TextView) findViewById(R.id.outputTV);
+        output = findViewById(R.id.outputTV);
 
         Typeface codeFont = Typeface.createFromAsset(getAssets(),"fonts/cmuntt.ttf");
         editText.setTypeface(codeFont);
@@ -92,7 +92,7 @@ public class CodeEditorActivity extends AppCompatActivity {
         return true;
     }
     public void onExecuteClick(View v){
-        Log.d("help","teest");
+        Log.d("help","test");
         Toast.makeText(getApplicationContext(),"Sending Code",Toast.LENGTH_LONG).show();
 
     }
