@@ -1,6 +1,7 @@
 package com.codeboard.htn.codeboard.editor;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -30,10 +32,11 @@ import org.json.JSONObject;
 
 public class CodeEditorActivity extends AppCompatActivity {
     //currently a test url
-    final static String URL = "https://httpbin.org/get";
+    final static String URL = "https://codeboarddj.azurewebsites.net/";
     RequestQueue requestQueue;
     EditText editText;
     EditText scriptName;
+    TextView output;
     Spinner languageSpinner;
     private String scriptText;
 
@@ -48,6 +51,12 @@ public class CodeEditorActivity extends AppCompatActivity {
         scriptName = findViewById(R.id.scriptNameET);
         scriptText = bundle.getString(SnippetCaptureActivity.SCRIPT_KEY);
         editText.setText(scriptText != null ? scriptText : "");
+        output = (TextView) findViewById(R.id.outputTV);
+
+        Typeface codeFont = Typeface.createFromAsset(getAssets(),"fonts/cmuntt.ttf");
+        editText.setTypeface(codeFont);
+        output.setTypeface(codeFont);
+
         requestQueue = Volley.newRequestQueue(this);
 
     }
@@ -63,8 +72,16 @@ public class CodeEditorActivity extends AppCompatActivity {
 
     }
     public void makeVolleyRequest(){
+        JSONObject requestObject = new JSONObject();
+        try {
+            requestObject.put("language", ((TextView) languageSpinner.getSelectedView()).getText());
+            requestObject.put("code", editText.getText().toString());
+        }catch(JSONException e){
+            Log.d("JSON FAIL:", e.getMessage());
+        }
+        Log.d("JSON SUCCESS:",requestObject.toString());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
+                (Request.Method.POST, URL, requestObject, new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
@@ -75,19 +92,21 @@ public class CodeEditorActivity extends AppCompatActivity {
                         }catch(JSONException e){
                             origin = "JSON FAIL:" + e.getMessage();
                         }
-
-                        editText.setText("HTTP succes: " + origin);
+                        output.setVisibility(View.VISIBLE);
+                        output.setText("HTTP succes: " + origin);
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d("HTTP RESPONSE", "FAIL");
-                        editText.setText("HTTP FAIL:" +error.getMessage());
+                        output.setVisibility(View.VISIBLE);
+                        output.setText("HTTP FAIL:" +error.getMessage());
 
                     }
                 });
         requestQueue.add(jsonObjectRequest);
+
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
