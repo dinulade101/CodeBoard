@@ -87,20 +87,21 @@ public class CodeEditorActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_code_editor, menu);
         return true;
     }
+
     public void onExecuteClick(View v){
         Log.d("help","test");
         Toast.makeText(getApplicationContext(),"Sending Code",Toast.LENGTH_LONG).show();
 
     }
-    public void makeVolleyRequest(){
 
+    public void executeCode(){
+       
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL,new Response.Listener<String>() {
 
                     @Override
@@ -139,6 +140,45 @@ public class CodeEditorActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
 
     }
+
+    public void autoFormat(){
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d("HTTP RESPONSE","Response: " + response.toString());
+                try{
+                    JSONObject jsonResp = new JSONObject(response);
+                    script.setScript(jsonResp.getString("output"));
+                }catch(Exception e){
+                    Log.d("JSON error:", e.getMessage());
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("HTTP RESPONSE", "FAIL");
+                output.setVisibility(View.VISIBLE);
+                output.setText("HTTP FAIL:" +error.getMessage());
+
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String,String> parameters = new HashMap<String,String>();
+                parameters.put("style",editText.getText().toString());
+                parameters.put("language",((TextView) languageSpinner.getSelectedView()).getText().toString());
+
+                return parameters;
+            }
+
+        };
+        requestQueue.add(stringRequest);
+
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -149,15 +189,22 @@ public class CodeEditorActivity extends AppCompatActivity {
         switch (id)  {
             case R.id.execute_code:
                 Toast.makeText(getApplicationContext(),"Sending Code",Toast.LENGTH_SHORT).show();
-                makeVolleyRequest();
+                executeCode();
+                break;
             case R.id.save_code:
                 Toast.makeText(getApplicationContext(),"Saving Code",Toast.LENGTH_SHORT).show();
+                script.setScript(editText.getText().toString());
+                script.setName(scriptName.getText().toString());
+                script.setLanguage(Script.Language.getLanguageForValue(languageSpinner.getSelectedItem().toString()));
                 ScriptModel.getModel().addScript(script);
-                return true;
+                break;
             case R.id.deleteBtn:
                 ScriptModel.getModel().deleteScript(script);
                 finish();
-
+                break;
+            case R.id.autoIndent:
+                autoFormat();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

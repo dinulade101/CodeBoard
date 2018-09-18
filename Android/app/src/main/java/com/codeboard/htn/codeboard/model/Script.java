@@ -105,7 +105,7 @@ public class Script implements Serializable {
 
         public static Language getLanguageForValue(String name) {
             for (Language l : Language.values()) {
-                if (l.equals(name)) {
+                if (l.toString().equals(name)) {
                     return l;
                 }
             }

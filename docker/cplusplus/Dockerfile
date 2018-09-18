@@ -7,5 +7,5 @@ COPY ./Makefile /usr/src/codeexec
 WORKDIR /usr/src/codeexec
 
 # Run the program output from the previous step
-CMD ["make"]
+CMD ["g++", "-o", "main", "main.cpp", ";", "./main"]
 
