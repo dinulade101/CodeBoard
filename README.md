@@ -1,6 +1,6 @@
 # Code Board
 
-<img src="/screenshots/gallery.jpg" width=300>
+<img src="https://github.com/dinulade101/CodeBoard/blob/master/screenshots/demo.gif" width=300>
 
 ## Inspiration
 When studying for school, learning algorithms and preparing for interviews, we would often write code on whiteboards to collaborate and come up with solutions. Hoping to quickly turn these ideas into real code, we would try to type it all up but this is a bit tedious and annoying. To save us valuable time we decided to automate this process.
